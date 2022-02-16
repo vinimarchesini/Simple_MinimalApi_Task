@@ -20,6 +20,14 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/tasks", async (AppDbContext db) => await db.Tasks.ToListAsync());
 
+app.MapGet("/tasks/{id}", async (int id, AppDbContext db) =>
+ await db.Tasks.FindAsync(id) is Task task ? Results.Ok(task) : Results.NotFound());
+
+app.MapGet("/tasks/concludeds", async (AppDbContext db) =>
+ await db.Tasks
+ .Where(x => x.IsConcluded)
+ .ToListAsync());
+
 app.MapPost("/tasks", async (Task task, AppDbContext db) =>
 {
     db.Tasks.Add(task);
