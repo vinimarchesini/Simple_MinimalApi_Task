@@ -27,6 +27,18 @@ app.MapPost("/tasks", async (Task task, AppDbContext db) =>
     return Results.Created($"/tarefas/{task.Id}", task);
 });
 
+app.MapPut("/tasks/{id}", async (int id, Task inputTask, AppDbContext db) =>
+{
+    if (await db.Tasks.FindAsync(id) is Task task)
+    {
+        task.Name = inputTask.Name;
+        task.IsConcluded = inputTask.IsConcluded;
+        await db.SaveChangesAsync();
+        return Results.NoContent();
+    }
+    return Results.NotFound();
+});
+
 app.Run();
 
 class Task
