@@ -39,6 +39,18 @@ app.MapPut("/tasks/{id}", async (int id, Task inputTask, AppDbContext db) =>
     return Results.NotFound();
 });
 
+app.MapDelete("/tasks/{id}", async (int id, AppDbContext db) =>
+{
+    if (await db.Tasks.FindAsync(id) is Task task)
+    {
+        db.Tasks.Remove(task);
+        await db.SaveChangesAsync();
+        return Results.Ok(task);
+    }
+    return Results.NotFound();
+});
+
+
 app.Run();
 
 class Task
