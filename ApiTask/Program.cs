@@ -20,6 +20,13 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/tasks", async (AppDbContext db) => await db.Tasks.ToListAsync());
 
+app.MapPost("/tasks", async (Task task, AppDbContext db) =>
+{
+    db.Tasks.Add(task);
+    await db.SaveChangesAsync();
+    return Results.Created($"/tarefas/{task.Id}", task);
+});
+
 app.Run();
 
 class Task
