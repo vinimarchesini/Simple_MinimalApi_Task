@@ -18,6 +18,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/tasks", async (AppDbContext db) => await db.Tasks.ToListAsync());
+
+app.Run();
+
 class Task
 {
     public int Id { get; set; }
